@@ -1,5 +1,7 @@
 # -Holosymmetry-Chaos-Collision
 Simulation proving the Chaos Collision Hypothesis: emergent meaning structures arise from the breathing tension of colliding chaotic fields.
+  
+  
   📜 README.md for holosymmetry-chaos-collision
 markdown
 Copy
