@@ -39,7 +39,7 @@ Together, these findings support the **Holosymmetry Principle**:
 1. **Clone the repository:**
 
 bash
-git clone https://github.com/YOUR_USERNAME/holosymmetry-chaos-collision.git
+git clone https://github.com/walsao/holosymmetry-chaos-collision.git
 cd holosymmetry-chaos-collision
 Install dependencies:
 
