@@ -1,0 +1,65 @@
+# CHAOS COLLISION SIMULATION
+# Proving Walter Augusto Lettau's Chaos Collision Law
+
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.spatial.distance import cdist
+from sklearn.cluster import DBSCAN
+
+# 1. Generate Two Independent Random Fields
+n_points = 100
+dim = 2  # 2D space for visualization
+
+np.random.seed(42)  # For reproducibility
+
+# Field A centered at (-2, 0)
+field_A = np.random.randn(n_points, dim) + np.array([-2, 0])
+
+# Field B centered at (+2, 0)
+field_B = np.random.randn(n_points, dim) + np.array([2, 0])
+
+# Combine the two fields (simulate collision)
+points = np.vstack((field_A, field_B))
+
+# 2. Define Relational Strength Function
+def relational_strength(points, sigma=1.0):
+    distances = cdist(points, points)
+    R = np.exp(-distances**2 / (2 * sigma**2))
+    return R
+
+# 3. Compute Relational Tension
+R = relational_strength(points)
+tension = np.sum(1 - R)  # Total relational tension (pq measure)
+print("Total Relational Tension:", round(tension, 2))
+
+# 4. Detect Emergent Clusters
+# DBSCAN parameters
+eps = 0.7  # Maximum distance between two samples to be considered neighbors
+min_samples = 5  # Minimum number of points to form a cluster
+
+clustering = DBSCAN(eps=eps, min_samples=min_samples).fit(points)
+labels = clustering.labels_
+
+# Number of clusters (excluding noise)
+n_clusters = len(set(labels)) - (1 if -1 in labels else 0)
+print("Number of Emergent Clusters:", n_clusters)
+
+# 5. Plot the Results
+plt.figure(figsize=(8, 6))
+unique_labels = set(labels)
+
+colors = [plt.cm.viridis(each) for each in np.linspace(0, 1, len(unique_labels))]
+for k, col in zip(unique_labels, colors):
+    class_member_mask = (labels == k)
+    xy = points[class_member_mask]
+    if k == -1:
+        # Noise (unclustered points)
+        col = [0, 0, 0, 1]  # Black
+    plt.plot(xy[:, 0], xy[:, 1], 'o', markerfacecolor=tuple(col), markeredgecolor='k', markersize=6)
+
+plt.title('Chaos Collision: Emergent Structures')
+plt.xlabel('x')
+plt.ylabel('y')
+plt.grid(True)
+plt.savefig('figures/example_output.png')  # Save figure
+plt.show() 
